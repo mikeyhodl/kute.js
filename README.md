@@ -5,8 +5,8 @@
 [![jsDeliver](https://img.shields.io/jsdelivr/npm/hw/kute.js)](https://www.jsdelivr.com/package/npm/kute.js)
 [![CDNJS](https://img.shields.io/cdnjs/v/kute.js.svg)](https://cdnjs.com/libraries/kute.js)
 ![svg-path-commander version](https://img.shields.io/badge/svg--path--commander-2.1.11-brightgreen)
-![@thednp/bezier-easing version](https://img.shields.io/badge/@thednp/bezier--easing-1.0.11-brightgreen)
-![typescript version](https://img.shields.io/badge/typescript-5.9.3-brightgreen)
+![@thednp/bezier-easing version](https://img.shields.io/badge/@thednp/bezier--easing-1.0.14-brightgreen)
+![typescript version](https://img.shields.io/badge/typescript-6.0.2-brightgreen)
 
 A modern JavaScript animation engine built on ES6+ standards with strong TypeScript definitions and most essential features for the web with easy to use methods to set up high performance, cross-browser animations. The focus is code quality, flexibility, performance and size. 
 

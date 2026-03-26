@@ -1,6 +1,6 @@
 {
   "name": "kute.js",
-  "version": "2.2.5",
+  "version": "2.2.6",
   "author": "thednp",
   "license": "MIT",
   "description": "JavaScript animation engine",
@@ -26,7 +26,6 @@
     "format": "deno fmt src docs/*html",
     "fix:js": "deno lint src --fix",
     "lint:js": "deno lint src",
-    "badges": "npx -p dependency-version-badge update-badge typescript @thednp/bezier-easing svg-path-commander",
     "copy-build": "rolldown --environment OUTPUTFILE:docs/src/kute.min.js,DIST:standard,MIN:true,FORMAT:umd -c",
     "build-standard": "rolldown --environment DIST:standard,MIN:false,FORMAT:umd -c",
     "build:ts": "tsc -d",
@@ -37,7 +36,7 @@
     "build-base-min": "rolldown --environment OUTPUTFILE:docs/src/kute-base.min.js,DIST:base,MIN:true,FORMAT:umd -c",
     "build-extra": "rolldown --environment OUTPUTFILE:docs/src/kute-extra.js,DIST:extra,MIN:false,FORMAT:umd -c",
     "build-extra-min": "rolldown --environment OUTPUTFILE:docs/src/kute-extra.min.js,DIST:extra,MIN:true,FORMAT:umd -c",
-    "prepublishOnly": "pnpm update --latest && pnpm badges && pnpm build"
+    "prepublishOnly": "pnpm update --latest && pnpm build"
   },
   "repository": {
     "type": "git",
@@ -60,16 +59,16 @@
     "url": "https://github.com/thednp/kute.js/issues"
   },
   "dependencies": {
-    "@thednp/bezier-easing": "^1.0.11",
-    "@thednp/shorty": "^2.0.11",
+    "@thednp/bezier-easing": "^1.0.14",
+    "@thednp/shorty": "^2.0.14",
     "minifill": "^0.0.17",
     "svg-path-commander": "^2.1.11"
   },
   "devDependencies": {
-    "rolldown": "1.0.0-rc.1",
-    "typescript": "^5.9.3"
+    "rolldown": "1.0.0-rc.12",
+    "typescript": "^6.0.2"
   },
-  "packageManager": "pnpm@8.6.12",
+  "packageManager": "pnpm@10.33.0",
   "engines": {
     "node": ">=16",
     "pnpm": ">=8.6.0"

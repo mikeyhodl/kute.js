@@ -1,5 +1,5 @@
 /*!
-* KUTE.js Standard v2.2.5 (http://thednp.github.io/kute.js)
+* KUTE.js Standard v2.2.6 (http://thednp.github.io/kute.js)
 * Copyright 2015-2026 © thednp
 * Licensed under MIT (https://github.com/thednp/kute.js/blob/master/LICENSE)
 */
@@ -9,29 +9,30 @@
   (global = typeof globalThis !== 'undefined' ? globalThis : global || self, (global.KUTE = factory()));
 })(this, function() {
 
-//#region node_modules/.pnpm/@thednp+bezier-easing@1.0.11/node_modules/@thednp/bezier-easing/dist/bezier-easing.mjs
-	var y$1 = class {
+//#region node_modules/.pnpm/@thednp+bezier-easing@1.0.14/node_modules/@thednp/bezier-easing/dist/bezier-easing.mjs
+	var e = "1.0.14", t = class {
+		static version = e;
 		cx;
 		bx;
 		ax;
 		cy;
 		by;
 		ay;
-		constructor(e, n, t, s, a) {
-			const i = e || 0, r = n || 0, h = t || 1, u = s || 1, b = (c) => typeof c == "number", o = [
+		constructor(e, t, n, r, i) {
+			let a = e || 0, o = t || 0, s = n || 1, c = r || 1, l = [
 				e,
-				n,
 				t,
-				s
-			].every(b), p = a || (o ? `cubic-bezier(${[
-				i,
-				r,
-				h,
-				u
+				n,
+				r
+			].every((e) => typeof e == "number"), u = i || (l ? `cubic-bezier(${[
+				a,
+				o,
+				s,
+				c
 			].join(",")})` : "linear");
-			this.cx = 3 * i, this.bx = 3 * (h - i) - this.cx, this.ax = 1 - this.cx - this.bx, this.cy = 3 * r, this.by = 3 * (u - r) - this.cy, this.ay = 1 - this.cy - this.by;
-			const l = (c) => this.sampleCurveY(this.solveCurveX(c));
-			return Object.defineProperty(l, "name", { writable: !0 }), l.name = p, l;
+			this.cx = 3 * a, this.bx = 3 * (s - a) - this.cx, this.ax = 1 - this.cx - this.bx, this.cy = 3 * o, this.by = 3 * (c - o) - this.cy, this.ay = 1 - this.cy - this.by;
+			let d = (e) => this.sampleCurveY(this.solveCurveX(e));
+			return Object.defineProperty(d, "name", { writable: !0 }), d.name = u, d;
 		}
 		sampleCurveX(e) {
 			return ((this.ax * e + this.bx) * e + this.cx) * e;
@@ -43,20 +44,21 @@
 			return (3 * this.ax * e + 2 * this.bx) * e + this.cx;
 		}
 		solveCurveX(e) {
+			let t = 1e-6;
 			if (e <= 0) return 0;
 			if (e >= 1) return 1;
-			let t = e, s = 0, a = 0;
-			for (let h = 0; h < 8; h += 1) {
-				if (s = this.sampleCurveX(t) - e, Math.abs(s) < 1e-6) return t;
-				if (a = this.sampleCurveDerivativeX(t), Math.abs(a) < 1e-6) break;
-				t -= s / a;
+			let n = e, r = 0, i = 0;
+			for (let a = 0; a < 8; a += 1) {
+				if (r = this.sampleCurveX(n) - e, Math.abs(r) < t) return n;
+				if (i = this.sampleCurveDerivativeX(n), Math.abs(i) < t) break;
+				n -= r / i;
 			}
-			let i = 0, r = 1;
-			for (t = e; i < r;) {
-				if (s = this.sampleCurveX(t), Math.abs(s - e) < 1e-6) return t;
-				e > s ? i = t : r = t, t = (r - i) * .5 + i;
+			let a = 0, o = 1;
+			for (n = e; a < o;) {
+				if (r = this.sampleCurveX(n), Math.abs(r - e) < t) return n;
+				e > r ? a = n : o = n, n = (o - a) * .5 + a;
 			}
-			return t;
+			return n;
 		}
 	};
 
@@ -66,12 +68,10 @@
 	* The KUTE.js Execution Context
 	*/
 	const KEC = {};
-	var kute_default = KEC;
 
 //#endregion
 //#region src/objects/tweens.js
 	const Tweens = [];
-	var tweens_default = Tweens;
 
 //#endregion
 //#region src/objects/globalObject.js
@@ -80,53 +80,49 @@
 	else if (typeof window !== "undefined") gl0bal = globalThis.self;
 	else gl0bal = {};
 	const globalObject = gl0bal;
-	var globalObject_default = globalObject;
 
 //#endregion
 //#region src/objects/interpolate.js
 	const interpolate = {};
-	var interpolate_default = interpolate;
 
 //#endregion
 //#region src/objects/onStart.js
 	const onStart = {};
-	var onStart_default = onStart;
 
 //#endregion
 //#region src/util/now.js
 	let performanceNow = () => performance.now();
 	if (typeof window === "undefined") performanceNow = () => (/* @__PURE__ */ new Date()).getTime();
 	const now = performanceNow;
-	var now_default = now;
 
 //#endregion
 //#region src/core/render.js
 	const Time = {};
-	Time.now = now_default;
+	Time.now = now;
 	let Tick = 0;
 	/**
 	* @param {number | Date} time
 	*/
 	const Ticker = (time) => {
 		let i = 0;
-		while (i < tweens_default.length) if (tweens_default[i].update(time)) i += 1;
-		else tweens_default.splice(i, 1);
+		while (i < Tweens.length) if (Tweens[i].update(time)) i += 1;
+		else Tweens.splice(i, 1);
 		Tick = requestAnimationFrame(Ticker);
 	};
 	function stop() {
 		setTimeout(() => {
-			if (!tweens_default.length && Tick) {
+			if (!Tweens.length && Tick) {
 				cancelAnimationFrame(Tick);
 				Tick = null;
-				Object.keys(onStart_default).forEach((obj) => {
-					if (typeof onStart_default[obj] === "function") {
-						if (kute_default[obj]) delete kute_default[obj];
-					} else Object.keys(onStart_default[obj]).forEach((prop) => {
-						if (kute_default[prop]) delete kute_default[prop];
+				Object.keys(onStart).forEach((obj) => {
+					if (typeof onStart[obj] === "function") {
+						if (KEC[obj]) delete KEC[obj];
+					} else Object.keys(onStart[obj]).forEach((prop) => {
+						if (KEC[prop]) delete KEC[prop];
 					});
 				});
-				Object.keys(interpolate_default).forEach((i) => {
-					if (kute_default[i]) delete kute_default[i];
+				Object.keys(interpolate).forEach((i) => {
+					if (KEC[i]) delete KEC[i];
 				});
 			}
 		}, 64);
@@ -134,24 +130,21 @@
 	const Render = {
 		Tick,
 		Ticker,
-		Tweens: tweens_default,
+		Tweens,
 		Time
 	};
 	Object.keys(Render).forEach((blob) => {
-		if (!kute_default[blob]) kute_default[blob] = blob === "Time" ? Time.now : Render[blob];
+		if (!KEC[blob]) KEC[blob] = blob === "Time" ? Time.now : Render[blob];
 	});
-	globalObject_default._KUTE = kute_default;
-	var render_default = Render;
+	globalObject._KUTE = KEC;
 
 //#endregion
 //#region src/objects/supportedProperties.js
 	const supportedProperties = {};
-	var supportedProperties_default = supportedProperties;
 
 //#endregion
 //#region src/objects/defaultValues.js
 	const defaultValues = {};
-	var defaultValues_default = defaultValues;
 
 //#endregion
 //#region src/objects/defaultOptions.js
@@ -165,52 +158,44 @@
 		resetStart: false,
 		offset: 0
 	};
-	var defaultOptions_default = defaultOptions;
 
 //#endregion
 //#region src/objects/prepareProperty.js
 	const prepareProperty = {};
-	var prepareProperty_default = prepareProperty;
 
 //#endregion
 //#region src/objects/prepareStart.js
 	const prepareStart = {};
-	var prepareStart_default = prepareStart;
 
 //#endregion
 //#region src/objects/crossCheck.js
 	const crossCheck = {};
-	var crossCheck_default = crossCheck;
 
 //#endregion
 //#region src/objects/onComplete.js
 	const onComplete = {};
-	var onComplete_default = onComplete;
 
 //#endregion
 //#region src/objects/linkProperty.js
 	const linkProperty = {};
-	var linkProperty_default = linkProperty;
 
 //#endregion
 //#region src/objects/objects.js
 	const Objects = {
-		supportedProperties: supportedProperties_default,
-		defaultValues: defaultValues_default,
-		defaultOptions: defaultOptions_default,
-		prepareProperty: prepareProperty_default,
-		prepareStart: prepareStart_default,
-		crossCheck: crossCheck_default,
-		onStart: onStart_default,
-		onComplete: onComplete_default,
-		linkProperty: linkProperty_default
+		supportedProperties,
+		defaultValues,
+		defaultOptions,
+		prepareProperty,
+		prepareStart,
+		crossCheck,
+		onStart,
+		onComplete,
+		linkProperty
 	};
-	var objects_default = Objects;
 
 //#endregion
 //#region src/objects/util.js
 	const Util = {};
-	var util_default = Util;
 
 //#endregion
 //#region src/core/add.js
@@ -219,8 +204,7 @@
 	*
 	* @param {KUTE.Tween} tw a new tween to add
 	*/
-	const add = (tw) => tweens_default.push(tw);
-	var add_default = add;
+	const add = (tw) => Tweens.push(tw);
 
 //#endregion
 //#region src/core/remove.js
@@ -230,10 +214,9 @@
 	* @param {KUTE.Tween} tw a new tween to add
 	*/
 	const remove = (tw) => {
-		const i = tweens_default.indexOf(tw);
-		if (i !== -1) tweens_default.splice(i, 1);
+		const i = Tweens.indexOf(tw);
+		if (i !== -1) Tweens.splice(i, 1);
 	};
-	var remove_default = remove;
 
 //#endregion
 //#region src/core/getAll.js
@@ -242,8 +225,7 @@
 	*
 	* @return {KUTE.Tween[]} tw a new tween to add
 	*/
-	const getAll = () => tweens_default;
-	var getAll_default = getAll;
+	const getAll = () => Tweens;
 
 //#endregion
 //#region src/core/removeAll.js
@@ -251,9 +233,8 @@
 	* KUTE.removeAll()
 	*/
 	const removeAll = () => {
-		tweens_default.length = 0;
+		Tweens.length = 0;
 	};
-	var removeAll_default = removeAll;
 
 //#endregion
 //#region src/core/linkInterpolation.js
@@ -262,20 +243,20 @@
 	* @this {KUTE.Tween}
 	*/
 	function linkInterpolation() {
-		Object.keys(linkProperty_default).forEach((component) => {
-			const componentLink = linkProperty_default[component];
-			const componentProps = supportedProperties_default[component];
+		Object.keys(linkProperty).forEach((component) => {
+			const componentLink = linkProperty[component];
+			const componentProps = supportedProperties[component];
 			Object.keys(componentLink).forEach((fnObj) => {
 				if (typeof componentLink[fnObj] === "function" && Object.keys(this.valuesEnd).some((i) => componentProps && componentProps.includes(i) || i === "attr" && Object.keys(this.valuesEnd[i]).some((j) => componentProps && componentProps.includes(j)))) {
-					if (!kute_default[fnObj]) kute_default[fnObj] = componentLink[fnObj];
+					if (!KEC[fnObj]) KEC[fnObj] = componentLink[fnObj];
 				} else Object.keys(this.valuesEnd).forEach((prop) => {
 					const propObject = this.valuesEnd[prop];
 					if (propObject instanceof Object) Object.keys(propObject).forEach((i) => {
 						if (typeof componentLink[i] === "function") {
-							if (!kute_default[i]) kute_default[i] = componentLink[i];
+							if (!KEC[i]) KEC[i] = componentLink[i];
 						} else Object.keys(componentLink[fnObj]).forEach((j) => {
 							if (componentLink[i] && typeof componentLink[i][j] === "function") {
-								if (!kute_default[j]) kute_default[j] = componentLink[i][j];
+								if (!KEC[j]) KEC[j] = componentLink[i][j];
 							}
 						});
 					});
@@ -287,14 +268,13 @@
 //#endregion
 //#region src/core/internals.js
 	const internals = {
-		add: add_default,
-		remove: remove_default,
-		getAll: getAll_default,
-		removeAll: removeAll_default,
+		add,
+		remove,
+		getAll,
+		removeAll,
 		stop,
 		linkInterpolation
 	};
-	var internals_default = internals;
 
 //#endregion
 //#region src/process/getInlineStyle.js
@@ -340,7 +320,7 @@
 	* @returns {string}
 	*/
 	function getStyleForProperty(elem, propertyName) {
-		let result = defaultValues_default[propertyName];
+		let result = defaultValues[propertyName];
 		const styleAttribute = elem.style;
 		const computedStyle = getComputedStyle(elem) || elem.currentStyle;
 		const styleValue = styleAttribute[propertyName] && !/auto|initial|none|unset/.test(styleAttribute[propertyName]) ? styleAttribute[propertyName] : computedStyle[propertyName];
@@ -360,16 +340,16 @@
 	*/
 	function prepareObject(obj, fn) {
 		const propertiesObject = fn === "start" ? this.valuesStart : this.valuesEnd;
-		Object.keys(prepareProperty_default).forEach((component) => {
-			const prepareComponent = prepareProperty_default[component];
-			const supportComponent = supportedProperties_default[component];
+		Object.keys(prepareProperty).forEach((component) => {
+			const prepareComponent = prepareProperty[component];
+			const supportComponent = supportedProperties[component];
 			Object.keys(prepareComponent).forEach((tweenCategory) => {
 				const transformObject = {};
 				Object.keys(obj).forEach((tweenProp) => {
-					if (defaultValues_default[tweenProp] && prepareComponent[tweenProp]) propertiesObject[tweenProp] = prepareComponent[tweenProp].call(this, tweenProp, obj[tweenProp]);
-					else if (!defaultValues_default[tweenCategory] && tweenCategory === "transform" && supportComponent.includes(tweenProp)) transformObject[tweenProp] = obj[tweenProp];
-					else if (!defaultValues_default[tweenProp] && tweenProp === "transform") propertiesObject[tweenProp] = obj[tweenProp];
-					else if (!defaultValues_default[tweenCategory] && supportComponent && supportComponent.includes(tweenProp)) propertiesObject[tweenProp] = prepareComponent[tweenCategory].call(this, tweenProp, obj[tweenProp]);
+					if (defaultValues[tweenProp] && prepareComponent[tweenProp]) propertiesObject[tweenProp] = prepareComponent[tweenProp].call(this, tweenProp, obj[tweenProp]);
+					else if (!defaultValues[tweenCategory] && tweenCategory === "transform" && supportComponent.includes(tweenProp)) transformObject[tweenProp] = obj[tweenProp];
+					else if (!defaultValues[tweenProp] && tweenProp === "transform") propertiesObject[tweenProp] = obj[tweenProp];
+					else if (!defaultValues[tweenCategory] && supportComponent && supportComponent.includes(tweenProp)) propertiesObject[tweenProp] = prepareComponent[tweenCategory].call(this, tweenProp, obj[tweenProp]);
 				});
 				if (Object.keys(transformObject).length) propertiesObject[tweenCategory] = prepareComponent[tweenCategory].call(this, tweenCategory, transformObject);
 			});
@@ -390,16 +370,16 @@
 		const startValues = {};
 		const currentStyle = getInlineStyle(this.element);
 		Object.keys(this.valuesStart).forEach((tweenProp) => {
-			Object.keys(prepareStart_default).forEach((component) => {
-				const componentStart = prepareStart_default[component];
+			Object.keys(prepareStart).forEach((component) => {
+				const componentStart = prepareStart[component];
 				Object.keys(componentStart).forEach((tweenCategory) => {
 					if (tweenCategory === tweenProp && componentStart[tweenProp]) startValues[tweenProp] = componentStart[tweenCategory].call(this, tweenProp, this.valuesStart[tweenProp]);
-					else if (supportedProperties_default[component] && supportedProperties_default[component].includes(tweenProp)) startValues[tweenProp] = componentStart[tweenCategory].call(this, tweenProp, this.valuesStart[tweenProp]);
+					else if (supportedProperties[component] && supportedProperties[component].includes(tweenProp)) startValues[tweenProp] = componentStart[tweenCategory].call(this, tweenProp, this.valuesStart[tweenProp]);
 				});
 			});
 		});
 		Object.keys(currentStyle).forEach((current) => {
-			if (!(current in this.valuesStart)) startValues[current] = currentStyle[current] || defaultValues_default[current];
+			if (!(current in this.valuesStart)) startValues[current] = currentStyle[current] || defaultValues[current];
 		});
 		this.valuesStart = {};
 		prepareObject.call(this, startValues, "start");
@@ -420,36 +400,35 @@
 	/** @type {KUTE.TweenBase | KUTE.Tween | KUTE.TweenExtra} */
 	connect.tween = null;
 	connect.processEasing = null;
-	var connect_default = connect;
 
 //#endregion
 //#region src/easing/easing-bezier.js
 	const Easing = {
-		linear: new y$1(0, 0, 1, 1, "linear"),
-		easingSinusoidalIn: new y$1(.47, 0, .745, .715, "easingSinusoidalIn"),
-		easingSinusoidalOut: new y$1(.39, .575, .565, 1, "easingSinusoidalOut"),
-		easingSinusoidalInOut: new y$1(.445, .05, .55, .95, "easingSinusoidalInOut"),
-		easingQuadraticIn: new y$1(.55, .085, .68, .53, "easingQuadraticIn"),
-		easingQuadraticOut: new y$1(.25, .46, .45, .94, "easingQuadraticOut"),
-		easingQuadraticInOut: new y$1(.455, .03, .515, .955, "easingQuadraticInOut"),
-		easingCubicIn: new y$1(.55, .055, .675, .19, "easingCubicIn"),
-		easingCubicOut: new y$1(.215, .61, .355, 1, "easingCubicOut"),
-		easingCubicInOut: new y$1(.645, .045, .355, 1, "easingCubicInOut"),
-		easingQuarticIn: new y$1(.895, .03, .685, .22, "easingQuarticIn"),
-		easingQuarticOut: new y$1(.165, .84, .44, 1, "easingQuarticOut"),
-		easingQuarticInOut: new y$1(.77, 0, .175, 1, "easingQuarticInOut"),
-		easingQuinticIn: new y$1(.755, .05, .855, .06, "easingQuinticIn"),
-		easingQuinticOut: new y$1(.23, 1, .32, 1, "easingQuinticOut"),
-		easingQuinticInOut: new y$1(.86, 0, .07, 1, "easingQuinticInOut"),
-		easingExponentialIn: new y$1(.95, .05, .795, .035, "easingExponentialIn"),
-		easingExponentialOut: new y$1(.19, 1, .22, 1, "easingExponentialOut"),
-		easingExponentialInOut: new y$1(1, 0, 0, 1, "easingExponentialInOut"),
-		easingCircularIn: new y$1(.6, .04, .98, .335, "easingCircularIn"),
-		easingCircularOut: new y$1(.075, .82, .165, 1, "easingCircularOut"),
-		easingCircularInOut: new y$1(.785, .135, .15, .86, "easingCircularInOut"),
-		easingBackIn: new y$1(.6, -.28, .735, .045, "easingBackIn"),
-		easingBackOut: new y$1(.175, .885, .32, 1.275, "easingBackOut"),
-		easingBackInOut: new y$1(.68, -.55, .265, 1.55, "easingBackInOut")
+		linear: new t(0, 0, 1, 1, "linear"),
+		easingSinusoidalIn: new t(.47, 0, .745, .715, "easingSinusoidalIn"),
+		easingSinusoidalOut: new t(.39, .575, .565, 1, "easingSinusoidalOut"),
+		easingSinusoidalInOut: new t(.445, .05, .55, .95, "easingSinusoidalInOut"),
+		easingQuadraticIn: new t(.55, .085, .68, .53, "easingQuadraticIn"),
+		easingQuadraticOut: new t(.25, .46, .45, .94, "easingQuadraticOut"),
+		easingQuadraticInOut: new t(.455, .03, .515, .955, "easingQuadraticInOut"),
+		easingCubicIn: new t(.55, .055, .675, .19, "easingCubicIn"),
+		easingCubicOut: new t(.215, .61, .355, 1, "easingCubicOut"),
+		easingCubicInOut: new t(.645, .045, .355, 1, "easingCubicInOut"),
+		easingQuarticIn: new t(.895, .03, .685, .22, "easingQuarticIn"),
+		easingQuarticOut: new t(.165, .84, .44, 1, "easingQuarticOut"),
+		easingQuarticInOut: new t(.77, 0, .175, 1, "easingQuarticInOut"),
+		easingQuinticIn: new t(.755, .05, .855, .06, "easingQuinticIn"),
+		easingQuinticOut: new t(.23, 1, .32, 1, "easingQuinticOut"),
+		easingQuinticInOut: new t(.86, 0, .07, 1, "easingQuinticInOut"),
+		easingExponentialIn: new t(.95, .05, .795, .035, "easingExponentialIn"),
+		easingExponentialOut: new t(.19, 1, .22, 1, "easingExponentialOut"),
+		easingExponentialInOut: new t(1, 0, 0, 1, "easingExponentialInOut"),
+		easingCircularIn: new t(.6, .04, .98, .335, "easingCircularIn"),
+		easingCircularOut: new t(.075, .82, .165, 1, "easingCircularOut"),
+		easingCircularInOut: new t(.785, .135, .15, .86, "easingCircularInOut"),
+		easingBackIn: new t(.6, -.28, .735, .045, "easingBackIn"),
+		easingBackOut: new t(.175, .885, .32, 1.275, "easingBackOut"),
+		easingBackInOut: new t(.68, -.55, .265, 1.55, "easingBackInOut")
 	};
 	/**
 	* Returns a valid `easingFunction`.
@@ -462,12 +441,11 @@
 		if (typeof Easing[fn] === "function") return Easing[fn];
 		if (/bezier/.test(fn)) {
 			const bz = fn.replace(/bezier|\s|\(|\)/g, "").split(",");
-			return new y$1(bz[0] * 1, bz[1] * 1, bz[2] * 1, bz[3] * 1);
+			return new t(bz[0] * 1, bz[1] * 1, bz[2] * 1, bz[3] * 1);
 		}
 		return Easing.linear;
 	}
-	connect_default.processEasing = processBezierEasing;
-	var easing_bezier_default = Easing;
+	connect.processEasing = processBezierEasing;
 
 //#endregion
 //#region src/util/selector.js
@@ -497,10 +475,10 @@
 //#endregion
 //#region src/core/queueStart.js
 	function queueStart() {
-		Object.keys(onStart_default).forEach((obj) => {
-			if (typeof onStart_default[obj] === "function") onStart_default[obj].call(this, obj);
-			else Object.keys(onStart_default[obj]).forEach((prop) => {
-				onStart_default[obj][prop].call(this, prop);
+		Object.keys(onStart).forEach((obj) => {
+			if (typeof onStart[obj] === "function") onStart[obj].call(this, obj);
+			else Object.keys(onStart[obj]).forEach((prop) => {
+				onStart[obj][prop].call(this, prop);
 			});
 		});
 		linkInterpolation.call(this);
@@ -535,18 +513,18 @@
 			const options = opsObject || {};
 			this._resetStart = options.resetStart || 0;
 			/** @type {KUTE.easingOption} */
-			this._easing = typeof options.easing === "function" ? options.easing : connect_default.processEasing(options.easing);
+			this._easing = typeof options.easing === "function" ? options.easing : connect.processEasing(options.easing);
 			/** @type {number} */
-			this._duration = options.duration || defaultOptions_default.duration;
+			this._duration = options.duration || defaultOptions.duration;
 			/** @type {number} */
-			this._delay = options.delay || defaultOptions_default.delay;
+			this._delay = options.delay || defaultOptions.delay;
 			Object.keys(options).forEach((op) => {
 				const internalOption = `_${op}`;
 				if (!(internalOption in this)) this[internalOption] = options[op];
 			});
 			const easingFnName = this._easing.name;
-			if (!onStart_default[easingFnName]) onStart_default[easingFnName] = function easingFn(prop) {
-				if (!kute_default[prop] && prop === this._easing.name) kute_default[prop] = this._easing;
+			if (!onStart[easingFnName]) onStart[easingFnName] = function easingFn(prop) {
+				if (!KEC[prop] && prop === this._easing.name) KEC[prop] = this._easing;
 			};
 			return this;
 		}
@@ -556,9 +534,9 @@
 		* @returns {TweenBase} this instance
 		*/
 		start(time) {
-			add_default(this);
+			add(this);
 			this.playing = true;
-			this._startTime = typeof time !== "undefined" ? time : kute_default.Time();
+			this._startTime = typeof time !== "undefined" ? time : KEC.Time();
 			this._startTime += this._delay;
 			if (!this._startFired) {
 				if (this._onStart) this._onStart.call(this);
@@ -574,7 +552,7 @@
 		*/
 		stop() {
 			if (this.playing) {
-				remove_default(this);
+				remove(this);
 				this.playing = false;
 				if (this._onStop) this._onStop.call(this);
 				this.close();
@@ -585,9 +563,9 @@
 		* Trigger internal completion callbacks.
 		*/
 		close() {
-			Object.keys(onComplete_default).forEach((component) => {
-				Object.keys(onComplete_default[component]).forEach((toClose) => {
-					onComplete_default[component][toClose].call(this, toClose);
+			Object.keys(onComplete).forEach((component) => {
+				Object.keys(onComplete[component]).forEach((toClose) => {
+					onComplete[component][toClose].call(this, toClose);
 				});
 			});
 			this._startFired = false;
@@ -615,14 +593,14 @@
 		* @returns {boolean} this instance
 		*/
 		update(time) {
-			const T = time !== void 0 ? time : kute_default.Time();
+			const T = time !== void 0 ? time : KEC.Time();
 			let elapsed;
 			if (T < this._startTime && this.playing) return true;
 			elapsed = (T - this._startTime) / this._duration;
 			elapsed = this._duration === 0 || elapsed > 1 ? 1 : elapsed;
 			const progress = this._easing(elapsed);
 			Object.keys(this.valuesEnd).forEach((tweenProp) => {
-				kute_default[tweenProp](this.element, this.valuesStart[tweenProp], this.valuesEnd[tweenProp], progress);
+				KEC[tweenProp](this.element, this.valuesStart[tweenProp], this.valuesEnd[tweenProp], progress);
 			});
 			if (this._onUpdate) this._onUpdate.call(this);
 			if (elapsed === 1) {
@@ -635,7 +613,7 @@
 			return true;
 		}
 	};
-	connect_default.tween = TweenBase;
+	connect.tween = TweenBase;
 
 //#endregion
 //#region src/tween/tween.js
@@ -659,9 +637,9 @@
 			prepareObject.call(this, endObject, "end");
 			if (this._resetStart) this.valuesStart = startObject;
 			else prepareObject.call(this, startObject, "start");
-			if (!this._resetStart) Object.keys(crossCheck_default).forEach((component) => {
-				Object.keys(crossCheck_default[component]).forEach((checkProp) => {
-					crossCheck_default[component][checkProp].call(this, checkProp);
+			if (!this._resetStart) Object.keys(crossCheck).forEach((component) => {
+				Object.keys(crossCheck[component]).forEach((checkProp) => {
+					crossCheck[component][checkProp].call(this, checkProp);
 				});
 			});
 			/** @type {boolean} */
@@ -669,15 +647,15 @@
 			/** @type {number?} */
 			this._pauseTime = null;
 			/** @type {number?} */
-			this._repeat = options.repeat || defaultOptions_default.repeat;
+			this._repeat = options.repeat || defaultOptions.repeat;
 			/** @type {number?} */
-			this._repeatDelay = options.repeatDelay || defaultOptions_default.repeatDelay;
+			this._repeatDelay = options.repeatDelay || defaultOptions.repeatDelay;
 			/** @type {number?} */
 			this._repeatOption = this._repeat;
 			/** @type {KUTE.tweenProps} */
 			this.valuesRepeat = {};
 			/** @type {boolean} */
-			this._yoyo = options.yoyo || defaultOptions_default.yoyo;
+			this._yoyo = options.yoyo || defaultOptions.yoyo;
 			/** @type {boolean} */
 			this._reversed = false;
 			return this;
@@ -691,9 +669,9 @@
 			if (this._resetStart) {
 				this.valuesStart = this._resetStart;
 				getStartValues.call(this);
-				Object.keys(crossCheck_default).forEach((component) => {
-					Object.keys(crossCheck_default[component]).forEach((checkProp) => {
-						crossCheck_default[component][checkProp].call(this, checkProp);
+				Object.keys(crossCheck).forEach((component) => {
+					Object.keys(crossCheck[component]).forEach((checkProp) => {
+						crossCheck[component][checkProp].call(this, checkProp);
 					});
 				});
 			}
@@ -737,8 +715,8 @@
 				this.paused = false;
 				if (this._onResume !== void 0) this._onResume.call(this);
 				queueStart.call(this);
-				this._startTime += kute_default.Time() - this._pauseTime;
-				add_default(this);
+				this._startTime += KEC.Time() - this._pauseTime;
+				add(this);
 				if (!Tick) Ticker();
 			}
 			return this;
@@ -749,9 +727,9 @@
 		*/
 		pause() {
 			if (!this.paused && this.playing) {
-				remove_default(this);
+				remove(this);
 				this.paused = true;
-				this._pauseTime = kute_default.Time();
+				this._pauseTime = KEC.Time();
 				if (this._onPause !== void 0) this._onPause.call(this);
 			}
 			return this;
@@ -773,14 +751,14 @@
 		* @returns {boolean} this instance
 		*/
 		update(time) {
-			const T = time !== void 0 ? time : kute_default.Time();
+			const T = time !== void 0 ? time : KEC.Time();
 			let elapsed;
 			if (T < this._startTime && this.playing) return true;
 			elapsed = (T - this._startTime) / this._duration;
 			elapsed = this._duration === 0 || elapsed > 1 ? 1 : elapsed;
 			const progress = this._easing(elapsed);
 			Object.keys(this.valuesEnd).forEach((tweenProp) => {
-				kute_default[tweenProp](this.element, this.valuesStart[tweenProp], this.valuesEnd[tweenProp], progress);
+				KEC[tweenProp](this.element, this.valuesStart[tweenProp], this.valuesEnd[tweenProp], progress);
 			});
 			if (this._onUpdate) this._onUpdate.call(this);
 			if (elapsed === 1) {
@@ -803,7 +781,7 @@
 			return true;
 		}
 	};
-	connect_default.tween = Tween;
+	connect.tween = Tween;
 
 //#endregion
 //#region src/tween/tweenCollection.js
@@ -820,16 +798,16 @@
 		* @returns {TweenCollection} the Tween object collection
 		*/
 		constructor(els, vS, vE, Options) {
-			const TweenConstructor = connect_default.tween;
+			const TweenConstructor = connect.tween;
 			/** @type {KUTE.twCollection[]} */
 			this.tweens = [];
 			const Ops = Options || {};
 			/** @type {number?} */
-			Ops.delay = Ops.delay || defaultOptions_default.delay;
+			Ops.delay = Ops.delay || defaultOptions.delay;
 			const options = [];
 			Array.from(els).forEach((el, i) => {
 				options[i] = Ops || {};
-				options[i].delay = i > 0 ? Ops.delay + (Ops.offset || defaultOptions_default.offset) : Ops.delay;
+				options[i].delay = i > 0 ? Ops.delay + (Ops.offset || defaultOptions.offset) : Ops.delay;
 				if (el instanceof Element) this.tweens.push(new TweenConstructor(el, vS, vE, options[i]));
 				else throw Error(`KUTE - ${el} is not instanceof Element`);
 			});
@@ -843,7 +821,7 @@
 		* @returns {TweenCollection} this instance
 		*/
 		start(time) {
-			const T = time === void 0 ? kute_default.Time() : time;
+			const T = time === void 0 ? KEC.Time() : time;
 			this.tweens.map((tween) => tween.start(T));
 			return this;
 		}
@@ -880,7 +858,7 @@
 		chain(args) {
 			const lastTween = this.tweens[this.length - 1];
 			if (args instanceof TweenCollection) lastTween.chain(args.tweens);
-			else if (args instanceof connect_default.tween) lastTween.chain(args);
+			else if (args instanceof connect.tween) lastTween.chain(args);
 			else throw new TypeError("KUTE.js - invalid chain value");
 			return this;
 		}
@@ -913,7 +891,7 @@
 
 //#endregion
 //#region src/interface/to.js
-	const { tween: TweenConstructor$1 } = connect_default;
+	const { tween: TweenConstructor$1 } = connect;
 	/**
 	* The `KUTE.to()` static method returns a new Tween object
 	* for a single `HTMLElement` at its current state.
@@ -931,7 +909,7 @@
 
 //#endregion
 //#region src/interface/fromTo.js
-	const { tween: TweenConstructor } = connect_default;
+	const { tween: TweenConstructor } = connect;
 	/**
 	* The `KUTE.fromTo()` static method returns a new Tween object
 	* for a single `HTMLElement` at a given state.
@@ -998,33 +976,33 @@
 		*/
 		constructor(Component) {
 			try {
-				if (Component.component in supportedProperties_default) throw Error(`KUTE - ${Component.component} already registered`);
-				else if (Component.property in defaultValues_default) throw Error(`KUTE - ${Component.property} already registered`);
+				if (Component.component in supportedProperties) throw Error(`KUTE - ${Component.component} already registered`);
+				else if (Component.property in defaultValues) throw Error(`KUTE - ${Component.property} already registered`);
 			} catch (e) {
 				throw Error(e);
 			}
 			const ComponentName = Component.component;
 			const Functions = {
-				prepareProperty: prepareProperty_default,
-				prepareStart: prepareStart_default,
-				onStart: onStart_default,
-				onComplete: onComplete_default,
-				crossCheck: crossCheck_default
+				prepareProperty,
+				prepareStart,
+				onStart,
+				onComplete,
+				crossCheck
 			};
 			const Category = Component.category;
 			const Property = Component.property;
 			const Length = Component.properties && Component.properties.length || Component.subProperties && Component.subProperties.length;
-			supportedProperties_default[ComponentName] = Component.properties || Component.subProperties || Component.property;
+			supportedProperties[ComponentName] = Component.properties || Component.subProperties || Component.property;
 			if ("defaultValue" in Component) {
-				defaultValues_default[Property] = Component.defaultValue;
+				defaultValues[Property] = Component.defaultValue;
 				this.supports = `${Property} property`;
 			} else if (Component.defaultValues) {
 				Object.keys(Component.defaultValues).forEach((dv) => {
-					defaultValues_default[dv] = Component.defaultValues[dv];
+					defaultValues[dv] = Component.defaultValues[dv];
 				});
 				this.supports = `${Length || Property} ${Property || Category} properties`;
 			}
-			if (Component.defaultOptions) Object.assign(defaultOptions_default, Component.defaultOptions);
+			if (Component.defaultOptions) Object.assign(defaultOptions, Component.defaultOptions);
 			if (Component.functions) Object.keys(Functions).forEach((fn) => {
 				if (fn in Component.functions) if (typeof Component.functions[fn] === "function") {
 					if (!Functions[fn][ComponentName]) Functions[fn][ComponentName] = {};
@@ -1037,15 +1015,15 @@
 			if (Component.Interpolate) {
 				Object.keys(Component.Interpolate).forEach((fni) => {
 					const compIntObj = Component.Interpolate[fni];
-					if (typeof compIntObj === "function" && !interpolate_default[fni]) interpolate_default[fni] = compIntObj;
+					if (typeof compIntObj === "function" && !interpolate[fni]) interpolate[fni] = compIntObj;
 					else Object.keys(compIntObj).forEach((sfn) => {
-						if (typeof compIntObj[sfn] === "function" && !interpolate_default[fni]) interpolate_default[fni] = compIntObj[sfn];
+						if (typeof compIntObj[sfn] === "function" && !interpolate[fni]) interpolate[fni] = compIntObj[sfn];
 					});
 				});
-				linkProperty_default[ComponentName] = Component.Interpolate;
+				linkProperty[ComponentName] = Component.Interpolate;
 			}
 			if (Component.Util) Object.keys(Component.Util).forEach((fnu) => {
-				if (!util_default[fnu]) util_default[fnu] = Component.Util[fnu];
+				if (!Util[fnu]) Util[fnu] = Component.Util[fnu];
 			});
 			return this;
 		}
@@ -1086,7 +1064,6 @@
 			u: theUnit
 		};
 	};
-	var trueDimension_default = trueDimension;
 
 //#endregion
 //#region src/interpolation/numbers.js
@@ -1109,7 +1086,7 @@
 	* @param {string} tweenProp the property name
 	*/
 	function boxModelOnStart(tweenProp) {
-		if (tweenProp in this.valuesEnd && !kute_default[tweenProp]) kute_default[tweenProp] = (elem, a, b, v) => {
+		if (tweenProp in this.valuesEnd && !KEC[tweenProp]) KEC[tweenProp] = (elem, a, b, v) => {
 			elem.style[tweenProp] = `${v > .99 || v < .01 ? (numbers(a, b, v) * 10 >> 0) / 10 : numbers(a, b, v) >> 0}px`;
 		};
 	}
@@ -1132,7 +1109,7 @@
 	* @returns {string} computed style for property
 	*/
 	function getBoxModel(tweenProp) {
-		return getStyleForProperty(this.element, tweenProp) || defaultValues_default[tweenProp];
+		return getStyleForProperty(this.element, tweenProp) || defaultValues[tweenProp];
 	}
 	/**
 	* Returns the property tween object.
@@ -1141,7 +1118,7 @@
 	* @returns {number} the property tween object
 	*/
 	function prepareBoxModel(tweenProp, value) {
-		const boxValue = trueDimension_default(value);
+		const boxValue = trueDimension(value);
 		const offsetProp = tweenProp === "height" ? "offsetHeight" : "offsetWidth";
 		return boxValue.u === "%" ? boxValue.v * this.element[offsetProp] / 100 : boxValue.v;
 	}
@@ -1172,9 +1149,8 @@
 			prepareProperty: prepareBoxModel,
 			onStart: essentialBoxOnStart
 		},
-		Util: { trueDimension: trueDimension_default }
+		Util: { trueDimension }
 	};
-	var boxModelEssential_default = BoxModelEssential;
 
 //#endregion
 //#region src/util/hexToRGB.js
@@ -1196,7 +1172,6 @@
 			b: parseInt(result[3], 16)
 		} : null;
 	};
-	var hexToRGB_default = hexToRGB;
 
 //#endregion
 //#region src/util/trueColor.js
@@ -1226,7 +1201,7 @@
 			};
 		}
 		if (/^#/.test(colorString)) {
-			const fromHex = hexToRGB_default(colorString);
+			const fromHex = hexToRGB(colorString);
 			result = {
 				r: fromHex.r,
 				g: fromHex.g,
@@ -1257,7 +1232,6 @@
 		}
 		return result;
 	};
-	var trueColor_default = trueColor;
 
 //#endregion
 //#region src/interpolation/colors.js
@@ -1299,7 +1273,7 @@
 	* @param {string} tweenProp the property name
 	*/
 	function onStartColors(tweenProp) {
-		if (this.valuesEnd[tweenProp] && !kute_default[tweenProp]) kute_default[tweenProp] = (elem, a, b, v) => {
+		if (this.valuesEnd[tweenProp] && !KEC[tweenProp]) KEC[tweenProp] = (elem, a, b, v) => {
 			elem.style[tweenProp] = colors(a, b, v);
 		};
 	}
@@ -1334,7 +1308,7 @@
 	* @returns {string} property computed style
 	*/
 	function getColor(prop) {
-		return getStyleForProperty(this.element, prop) || defaultValues_default[prop];
+		return getStyleForProperty(this.element, prop) || defaultValues[prop];
 	}
 	/**
 	* Returns the property tween object.
@@ -1343,7 +1317,7 @@
 	* @returns {KUTE.colorObject} the property tween object
 	*/
 	function prepareColor(_, value) {
-		return trueColor_default(value);
+		return trueColor(value);
 	}
 	const colorProperties = {
 		component: "colorProperties",
@@ -1359,23 +1333,22 @@
 			prepareProperty: prepareColor,
 			onStart: colorsOnStart
 		},
-		Util: { trueColor: trueColor_default }
+		Util: { trueColor }
 	};
-	var colorProperties_default = colorProperties;
 
 //#endregion
 //#region src/components/htmlAttributesBase.js
 	const attributes = {};
 	const onStartAttr = {
 		attr(tweenProp) {
-			if (!kute_default[tweenProp] && this.valuesEnd[tweenProp]) kute_default[tweenProp] = (elem, vS, vE, v) => {
+			if (!KEC[tweenProp] && this.valuesEnd[tweenProp]) KEC[tweenProp] = (elem, vS, vE, v) => {
 				Object.keys(vE).forEach((oneAttr) => {
-					kute_default.attributes[oneAttr](elem, oneAttr, vS[oneAttr], vE[oneAttr], v);
+					KEC.attributes[oneAttr](elem, oneAttr, vS[oneAttr], vE[oneAttr], v);
 				});
 			};
 		},
 		attributes(tweenProp) {
-			if (!kute_default[tweenProp] && this.valuesEnd.attr) kute_default[tweenProp] = attributes;
+			if (!KEC[tweenProp] && this.valuesEnd.attr) KEC[tweenProp] = attributes;
 		}
 	};
 
@@ -1424,17 +1397,17 @@
 			const currentValue = this.element.getAttribute(prop.replace(/_+[a-z]+/, ""));
 			if (!svgColors.includes(prop)) {
 				if (currentValue !== null && regex.test(currentValue)) {
-					const unit = trueDimension_default(currentValue).u || trueDimension_default(attrObj[p]).u;
+					const unit = trueDimension(currentValue).u || trueDimension(attrObj[p]).u;
 					const suffix = /%/.test(unit) ? "_percent" : `_${unit}`;
-					onStart_default[ComponentName][prop + suffix] = (tp) => {
+					onStart[ComponentName][prop + suffix] = (tp) => {
 						if (this.valuesEnd[tweenProp] && this.valuesEnd[tweenProp][tp] && !(tp in attributes)) attributes[tp] = (elem, oneAttr, a, b, v) => {
 							const _p = oneAttr.replace(suffix, "");
 							elem.setAttribute(_p, (numbers(a.v, b.v, v) * 1e3 >> 0) / 1e3 + b.u);
 						};
 					};
-					attributesObject[prop + suffix] = trueDimension_default(attrObj[p]);
+					attributesObject[prop + suffix] = trueDimension(attrObj[p]);
 				} else if (!regex.test(attrObj[p]) || currentValue === null || currentValue && !regex.test(currentValue)) {
-					onStart_default[ComponentName][prop] = (tp) => {
+					onStart[ComponentName][prop] = (tp) => {
 						if (this.valuesEnd[tweenProp] && this.valuesEnd[tweenProp][tp] && !(tp in attributes)) attributes[tp] = (elem, oneAttr, a, b, v) => {
 							elem.setAttribute(oneAttr, (numbers(a, b, v) * 1e3 >> 0) / 1e3);
 						};
@@ -1442,12 +1415,12 @@
 					attributesObject[prop] = parseFloat(attrObj[p]);
 				}
 			} else {
-				onStart_default[ComponentName][prop] = (tp) => {
+				onStart[ComponentName][prop] = (tp) => {
 					if (this.valuesEnd[tweenProp] && this.valuesEnd[tweenProp][tp] && !(tp in attributes)) attributes[tp] = (elem, oneAttr, a, b, v) => {
 						elem.setAttribute(oneAttr, colors(a, b, v));
 					};
 				};
-				attributesObject[prop] = trueColor_default(attrObj[p]) || defaultValues_default.htmlAttributes[p];
+				attributesObject[prop] = trueColor(attrObj[p]) || defaultValues.htmlAttributes[p];
 			}
 		});
 		return attributesObject;
@@ -1482,11 +1455,10 @@
 		functions: attrFunctions,
 		Util: {
 			replaceUppercase,
-			trueColor: trueColor_default,
-			trueDimension: trueDimension_default
+			trueColor,
+			trueDimension
 		}
 	};
-	var htmlAttributes_default = htmlAttributes;
 
 //#endregion
 //#region src/components/opacityPropertyBase.js
@@ -1495,7 +1467,7 @@
 	* @param {string} tweenProp the property name
 	*/
 	function onStartOpacity(tweenProp) {
-		if (tweenProp in this.valuesEnd && !kute_default[tweenProp]) kute_default[tweenProp] = (elem, a, b, v) => {
+		if (tweenProp in this.valuesEnd && !KEC[tweenProp]) KEC[tweenProp] = (elem, a, b, v) => {
 			elem.style[tweenProp] = (numbers(a, b, v) * 1e3 >> 0) / 1e3;
 		};
 	}
@@ -1530,7 +1502,6 @@
 			onStart: onStartOpacity
 		}
 	};
-	var opacityProperty_default = OpacityProperty;
 
 //#endregion
 //#region src/components/textWriteBase.js
@@ -1549,12 +1520,12 @@
 	};
 	const onStartWrite = {
 		text(tweenProp) {
-			if (!kute_default[tweenProp] && this.valuesEnd[tweenProp]) {
+			if (!KEC[tweenProp] && this.valuesEnd[tweenProp]) {
 				const chars = this._textChars;
-				let charsets = charSet[defaultOptions_default.textChars];
+				let charsets = charSet[defaultOptions.textChars];
 				if (chars in charSet) charsets = charSet[chars];
 				else if (chars && chars.length) charsets = chars;
-				kute_default[tweenProp] = (elem, a, b, v) => {
+				KEC[tweenProp] = (elem, a, b, v) => {
 					let initialText = "";
 					let endText = "";
 					const finalText = b === "" ? " " : b;
@@ -1576,7 +1547,7 @@
 			}
 		},
 		number(tweenProp) {
-			if (tweenProp in this.valuesEnd && !kute_default[tweenProp]) kute_default[tweenProp] = (elem, a, b, v) => {
+			if (tweenProp in this.valuesEnd && !KEC[tweenProp]) KEC[tweenProp] = (elem, a, b, v) => {
 				elem.innerHTML = numbers(a, b, v) >> 0;
 			};
 		}
@@ -1655,7 +1626,7 @@
 		options.duration = 1e3;
 		if (ops.duration === "auto") options.duration = "auto";
 		else if (Number.isFinite(ops.duration * 1)) options.duration = ops.duration * 1;
-		const TweenContructor = connect_default.tween;
+		const TweenContructor = connect.tween;
 		const segs = setSegments(target, newText);
 		const oldTargetSegs = segs[0];
 		const newTargetSegs = segs[1];
@@ -1727,7 +1698,6 @@
 			createTextTweens
 		}
 	};
-	var textWrite_default = TextWrite;
 
 //#endregion
 //#region src/interpolation/perspective.js
@@ -1853,7 +1823,7 @@
 	* @param {string} tweenProp the property name
 	*/
 	function onStartTransform(tweenProp) {
-		if (!kute_default[tweenProp] && this.valuesEnd[tweenProp]) kute_default[tweenProp] = (elem, a, b, v) => {
+		if (!KEC[tweenProp] && this.valuesEnd[tweenProp]) KEC[tweenProp] = (elem, a, b, v) => {
 			elem.style[tweenProp] = (a.perspective || b.perspective ? perspective(a.perspective, b.perspective, "px", v) : "") + (a.translate3d ? translate3d(a.translate3d, b.translate3d, "px", v) : "") + (a.rotate3d ? rotate3d(a.rotate3d, b.rotate3d, "deg", v) : "") + (a.skew ? skew(a.skew, b.skew, "deg", v) : "") + (a.scale || b.scale ? scale(a.scale, b.scale, v) : "");
 		};
 	}
@@ -1867,7 +1837,7 @@
 	*/
 	function getTransform(tweenProp) {
 		const currentStyle = getInlineStyle(this.element);
-		return currentStyle[tweenProp] ? currentStyle[tweenProp] : defaultValues_default[tweenProp];
+		return currentStyle[tweenProp] ? currentStyle[tweenProp] : defaultValues[tweenProp];
 	}
 	/**
 	* Returns the property tween object.
@@ -2004,7 +1974,6 @@
 			skew
 		}
 	};
-	var transformFunctions_default = TransformFunctions;
 
 //#endregion
 //#region src/components/svgDrawBase.js
@@ -2013,7 +1982,7 @@
 	* @param {string} tweenProp the property name
 	*/
 	function onStartDraw(tweenProp) {
-		if (tweenProp in this.valuesEnd && !kute_default[tweenProp]) kute_default[tweenProp] = (elem, a, b, v) => {
+		if (tweenProp in this.valuesEnd && !KEC[tweenProp]) KEC[tweenProp] = (elem, a, b, v) => {
 			const pathLength = (a.l * 100 >> 0) / 100;
 			const start = (numbers(a.s, b.s, v) * 100 >> 0) / 100;
 			const end = (numbers(a.e, b.e, v) * 100 >> 0) / 100;
@@ -2196,7 +2165,6 @@
 			percent
 		}
 	};
-	var svgDraw_default = SvgDrawProperty;
 
 //#endregion
 //#region node_modules/.pnpm/@thednp+dommatrix@2.0.12/node_modules/@thednp/dommatrix/dist/dommatrix.mjs
@@ -3474,7 +3442,7 @@
 			x: m,
 			y: u
 		}, f = 0, g = c, p = 0;
-		return !l || e < se ? c : (T(n, (h, y, S, A) => {
+		return !l || e < 1e-5 ? c : (T(n, (h, y, S, A) => {
 			[s] = h, o = s === "M", r = o ? r : [S, A].concat(h.slice(1));
 			if (o ? ([, m, u] = h, c = {
 				x: m,
@@ -3490,7 +3458,7 @@
 			}, f = ce(r[0], r[1], r[2], r[3])), [a, i] = r.slice(-2), p < e) g = c;
 			else return !1;
 			p += f;
-		}), e > p - se ? {
+		}), e > p - 1e-5 ? {
 			x: a,
 			y: i
 		} : g);
@@ -3543,7 +3511,7 @@
 	* @param {string} tweenProp the property name
 	*/
 	function onStartSVGMorph(tweenProp) {
-		if (!kute_default[tweenProp] && this.valuesEnd[tweenProp]) kute_default[tweenProp] = (elem, a, b, v) => {
+		if (!KEC[tweenProp] && this.valuesEnd[tweenProp]) KEC[tweenProp] = (elem, a, b, v) => {
 			const path1 = a.polygon;
 			const path2 = b.polygon;
 			const len = path2.length;
@@ -3718,7 +3686,7 @@
 	* @returns {KUTE.polygonMorph[]} the two polygons
 	*/
 	function getInterpolationPoints(path1, path2, precision) {
-		const morphPrecision = precision || defaultOptions_default.morphPrecision;
+		const morphPrecision = precision || defaultOptions.morphPrecision;
 		const fromRing = getPolygon(path1, morphPrecision);
 		const toRing = getPolygon(path2, morphPrecision);
 		const diff = fromRing.length - toRing.length;
@@ -3762,7 +3730,7 @@
 			if (!pathArray1 || !pathArray2 || pathArray1.length !== pathArray2.length) {
 				const p1 = this.valuesStart[prop].original;
 				const p2 = this.valuesEnd[prop].original;
-				const [path1, path2] = getInterpolationPoints(p1, p2, this._morphPrecision ? parseInt(this._morphPrecision, 10) : defaultOptions_default.morphPrecision);
+				const [path1, path2] = getInterpolationPoints(p1, p2, this._morphPrecision ? parseInt(this._morphPrecision, 10) : defaultOptions.morphPrecision);
 				this.valuesStart[prop].polygon = path1;
 				this.valuesEnd[prop].polygon = path2;
 			}
@@ -3799,29 +3767,27 @@
 			roundPath: Lt
 		}
 	};
-	var svgMorph_default = SVGMorph;
 
 //#endregion
 //#region src/objects/componentsDefault.js
 	const Components = {
-		EssentialBoxModel: boxModelEssential_default,
-		ColorsProperties: colorProperties_default,
-		HTMLAttributes: htmlAttributes_default,
-		OpacityProperty: opacityProperty_default,
-		TextWriteProp: textWrite_default,
-		TransformFunctions: transformFunctions_default,
-		SVGDraw: svgDraw_default,
-		SVGMorph: svgMorph_default
+		EssentialBoxModel: BoxModelEssential,
+		ColorsProperties: colorProperties,
+		HTMLAttributes: htmlAttributes,
+		OpacityProperty,
+		TextWriteProp: TextWrite,
+		TransformFunctions,
+		SVGDraw: SvgDrawProperty,
+		SVGMorph
 	};
 	Object.keys(Components).forEach((component) => {
 		const compOps = Components[component];
 		Components[component] = new Animation(compOps);
 	});
-	var componentsDefault_default = Components;
 
 //#endregion
 //#region package.json
-	var version = "2.2.5";
+	var version = "2.2.6";
 
 //#endregion
 //#region src/util/version.js
@@ -3830,32 +3796,30 @@
 	* @type {string}
 	*/
 	const Version = version;
-	var version_default = Version;
 
 //#endregion
 //#region src/index.js
 	const KUTE = {
 		Animation,
-		Components: componentsDefault_default,
+		Components,
 		Tween,
 		fromTo,
 		to,
 		TweenCollection,
 		allFromTo,
 		allTo,
-		Objects: objects_default,
-		Util: util_default,
-		Easing: easing_bezier_default,
-		CubicBezier: y$1,
-		Render: render_default,
-		Interpolate: interpolate_default,
+		Objects,
+		Util,
+		Easing,
+		CubicBezier: t,
+		Render,
+		Interpolate: interpolate,
 		Process: process_default,
-		Internals: internals_default,
+		Internals: internals,
 		Selector: selector,
-		Version: version_default
+		Version
 	};
-	var src_default = KUTE;
 
 //#endregion
-return src_default;
+return KUTE;
 });
